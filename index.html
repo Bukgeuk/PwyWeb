@@ -4,10 +4,32 @@
         <meta charset="utf-8">
         <title>제목</title>
 
+        <link href="css/font.css" rel="stylesheet">
+        <link href="css/login.css" rel="stylesheet">
+        <script src="./index.js"></script>
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     </head>
     <body>
-
+        <div id="login">
+            <div>
+                <div id="title-div">
+                    <span id="title">로그인</span>
+                </div>
+                <div>
+                    <div class="input-group mb-3">
+                        <input type="text" id="id" class="form-control" placeholder="아이디" aria-label="id">
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="pw" class="form-control" placeholder="비밀번호" aria-label="pw">
+                    </div>
+                    <span id="errmsg"></span>
+                    <button type="button" class="btn btn-outline-primary mt-3 longBtn" onclick="login()">로그인</button>
+                </div>
+            </div>
+            <span onclick="toAdminPage()">관리자 페이지</span>
+        </div>
+        
     </body>
 </html>

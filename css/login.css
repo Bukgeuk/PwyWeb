@@ -2,18 +2,17 @@ html {
     height: 100%;
 }
 
-body {
-    position: relative;
+#login {
+    position: fixed;
     width: 100%;
     height: 100%;
+
+    background-color: white;
+
     font-family: ELAND_Choice_M;
 }
 
-#title {
-    font-size: 3rem;
-}
-
-section {
+#login > div {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -22,12 +21,29 @@ section {
     margin: -180px 0 0 -150px;
 }
 
-header {
+#login > span {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    margin: 0 5px 5px 0;
+}
+
+#login > span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#title {
+    font-size: 3rem;
+}
+
+#title-div {
     margin-bottom: 50px;
     text-align: center;
 }
 
-button {
+.longBtn {
     width: 100%;
 }
 
