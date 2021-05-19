@@ -1,0 +1,88 @@
+body {
+    height: 100%;
+}
+
+#idSpan {
+    font-weight: bold;
+}
+
+#accountBox {
+    border-radius: 15px;
+    border: 2px solid gray;
+
+    width: 200px;
+
+    padding: 20px 10px 25px 10px;
+    margin: 50px auto;
+}
+
+#accountBox > button {
+    margin-top: 15px;
+}
+
+#accountBox > div {
+    padding: 0 5px 0 5px;
+}
+
+#accountBox > div > span {
+    font-size: 1.2rem;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    font-family: ELAND_Choice_M;
+
+    height: 100%;
+}
+
+#nav, #aside {
+    width: 15%;
+}
+
+#center {
+    width: 70%;
+
+    padding: 0 20px 0 20px;
+}
+
+#filter > span, #sort > span {
+    margin-left: 20px;
+    display: inline-block;
+    cursor: pointer;
+
+    border-radius: 23px;
+}
+
+#option > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    margin: 5px 0;
+}
+
+#option > div > div:first-child {
+    border-right: 1px solid black;
+    padding: 0 5px;
+    width: max-content;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#option > div:first-child > div:first-child {
+    line-height: 48px;
+}
+
+.option-title {
+    font-size: 1.1rem;
+}
+
+.option-selected {
+    background-color: #00ab33;
+    padding: 0 10px;
+    color: white;
+}
