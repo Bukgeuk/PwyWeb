@@ -34,6 +34,8 @@ async function adminLogin() {
 
         loadUserList()
 
+        document.getElementById('errmsg').textContent = ''
+
         document.getElementById('id').value = ''
         document.getElementById('pw').value = ''
         document.getElementById('loginBtn').classList.add('disabled')
@@ -82,7 +84,10 @@ async function loadUserList() {
     }
 
     if (res.errorCode) {
-
+        if (res.errorCode === 'E302') {
+            adminLogout()
+            alert('다시 로그인 해주세요')
+        }
     } else if (res.user) {
         res.user.sort((a, b) => {
             return a.uid - b.uid
@@ -151,6 +156,9 @@ async function removeUser(uid) {
     if (res.errorCode) {
         if (res.errorCode === 'E108') {
             alert('존재하지 않는 계정입니다')
+        } else if (res.errorCode === 'E302') {
+            adminLogout()
+            alert('다시 로그인 해주세요')
         }
     } else {
         loadUserList()
@@ -192,6 +200,9 @@ async function createUser() {
     if (res.errorCode) {
         if (res.errorCode === 'E102') {
             alert('이미 존재하는 계정입니다')
+        } else if (res.errorCode === 'E302') {
+            adminLogout()
+            alert('다시 로그인 해주세요')
         }
     } else {
         loadUserList()

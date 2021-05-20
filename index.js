@@ -51,6 +51,15 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     sort.children[0].classList.add('option-selected')
+
+    let alarm = document.getElementById('alarm')
+    if (isAllowedNotificationPermission()) {
+        alarm.textContent = '알람 ON'
+        alarm.classList.add('btn-success')
+    } else {
+        alarm.textContent = '알람 OFF'
+        alarm.classList.add('btn-danger')
+    }
 })
 
 async function login() {
@@ -87,8 +96,11 @@ async function login() {
         document.getElementById('id').value = ''
         document.getElementById('pw').value = ''
 
-        document.getElementById('idSpan').textContent = id
+        document.getElementById('errmsg').textContent = ''
+
+        document.getElementById('accountDropdownMenuButton').textContent = id + '님'
         document.getElementById('login').style.display = 'none'
+        document.getElementById('accountDropdown').style.display = 'unset'
     }
 }
 
@@ -136,5 +148,29 @@ function selectSort(num, event) {
 function logout() {
     TOKEN = undefined
     document.getElementById('login').style.display = 'unset'
-    document.getElementById('logoutBtn').style.display = 'none'
+    document.getElementById('accountDropdown').style.display = 'none'
+}
+
+async function load() {
+    try {
+        res = await fetch(`${API}/api/v1/post/${selectedEvent}`, {
+            method: 'get',
+            headers: {
+                'authentication': TOKEN,
+                'isOrderByOdd': selectedSort === '날짜순' ? false : true
+            }
+        })
+        res = await res.json()
+    } catch (err) {
+        console.log(err)
+    }
+
+    if (res.errorCode) {
+        if (res.errorCode === 'E302') {
+            logout()
+            alert('다시 로그인 해주세요')
+        }
+    }
+
+    
 }

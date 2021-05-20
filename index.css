@@ -6,26 +6,21 @@ body {
     font-weight: bold;
 }
 
-#accountBox {
-    border-radius: 15px;
-    border: 2px solid gray;
+#accountDropdown {
+    top: 5px;
+    left: 10px;
 
-    width: 200px;
-
-    padding: 20px 10px 25px 10px;
-    margin: 50px auto;
+    display: none;
+    position: fixed;
+    cursor: pointer;
 }
 
-#accountBox > button {
-    margin-top: 15px;
+#accountDropdown > span {
+    color: rgba(0, 0, 0, 0.9);
 }
 
-#accountBox > div {
-    padding: 0 5px 0 5px;
-}
-
-#accountBox > div > span {
-    font-size: 1.2rem;
+#accountDropdown > span:hover {
+    color: rgba(0,0,0,.7);
 }
 
 section {
@@ -40,12 +35,14 @@ section {
 
 #nav, #aside {
     width: 15%;
+
+    overflow-x: hidden;
 }
 
 #center {
     width: 70%;
 
-    padding: 0 20px 0 20px;
+    padding: 50px 20px;
 }
 
 #filter > span, #sort > span {
@@ -54,6 +51,10 @@ section {
     cursor: pointer;
 
     border-radius: 23px;
+}
+
+#option {
+    margin-bottom: 50px;
 }
 
 #option > div {
@@ -85,4 +86,35 @@ section {
     background-color: #00ab33;
     padding: 0 10px;
     color: white;
+}
+
+#scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+#scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.6);
+    border-radius: 4px;
+}
+
+#scroll::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#scroll > div:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+#scroll > div > div > span {
+    display: inline-block;
+    margin-left: 20px;
+    text-align: center;
+}
+
+#scroll > div > div > span:first-child {
+    width: 70px;
+}
+
+.listing-number {
+    width: 8px;
 }
