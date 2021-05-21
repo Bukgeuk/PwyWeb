@@ -118,3 +118,13 @@ section {
 .listing-number {
     width: 8px;
 }
+
+#alarm {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    margin: 5px 5px;
+
+    display: none;
+}

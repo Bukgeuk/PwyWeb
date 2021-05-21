@@ -25,6 +25,8 @@ const SORTS = [
     '수익률순'
 ]
 let TOKEN, selectedEvent = '축구', selectedSort = '날짜순'
+let savedId = '', savedPw = ''
+let RENEW_TIMER, ALARM_TIMER
 
 window.addEventListener('DOMContentLoaded', () => {
     let filter = document.getElementById('filter')
@@ -53,7 +55,7 @@ window.addEventListener('DOMContentLoaded', () => {
     sort.children[0].classList.add('option-selected')
 
     let alarm = document.getElementById('alarm')
-    if (isAllowedNotificationPermission()) {
+    if (isAllowedNotificationPermission() && getUseAlarm()) {
         alarm.textContent = '알람 ON'
         alarm.classList.add('btn-success')
     } else {
@@ -64,7 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 async function login() {
     let id = document.getElementById('id').value
-    let pw = document.getElementById('pw').value
+    let pw = hex_sha512(document.getElementById('pw').value)
     let res, formBody = []
 
     formBody.push(`id=${encodeURIComponent(id)}`)
@@ -93,14 +95,27 @@ async function login() {
     } else if (res.accessToken) {
         TOKEN = res.accessToken
 
-        document.getElementById('id').value = ''
-        document.getElementById('pw').value = ''
+        let __id = document.getElementById('id')
+        let __pw = document.getElementById('pw')
+        
+        savedId = __id.value
+        savedPw = hex_sha512(__pw.value)
+
+        __id.value = ''
+        __pw.value = ''
 
         document.getElementById('errmsg').textContent = ''
 
         document.getElementById('accountDropdownMenuButton').textContent = id + '님'
         document.getElementById('login').style.display = 'none'
         document.getElementById('accountDropdown').style.display = 'unset'
+        document.getElementById('alarm').style.display = 'unset'
+
+        RENEW_TIMER = setInterval(renew, 1000 * 60 * 60)
+        
+        if (getUseAlarm() && isAllowedNotificationPermission()) {
+            ALARM_TIMER = setInterval(loadAlarm, 1000 * 60 * 30)
+        }
     }
 }
 
@@ -149,6 +164,14 @@ function logout() {
     TOKEN = undefined
     document.getElementById('login').style.display = 'unset'
     document.getElementById('accountDropdown').style.display = 'none'
+    document.getElementById('alarm').style.display = 'none'
+
+    clearInterval(RENEW_TIMER)
+    RENEW_TIMER = undefined
+    if (ALARM_TIMER !== undefined) {
+        clearInterval(ALARM_TIMER)
+        ALARM_TIMER = undefined
+    }
 }
 
 async function load() {
@@ -171,6 +194,32 @@ async function load() {
             alert('다시 로그인 해주세요')
         }
     }
+}
 
-    
+async function renew() {
+    let res, formBody = []
+
+    formBody.push(`id=${encodeURIComponent(savedId)}`)
+    formBody.push(`password=${encodeURIComponent(savedPw)}`)
+    formBody = formBody.join('&')
+
+    try {
+        res = await fetch(`${API}/api/v1/login`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBody
+        })
+        res = await res.json()
+    } catch (err) {
+        console.log(err)
+    }
+
+    if (res.errorCode) {
+        if (res.errorCode === 'E101') {
+            logout()
+            alert('다시 로그인해 주세요')
+        }
+    }
 }

@@ -3,7 +3,7 @@ let ADMINTOKEN
 
 async function adminLogin() {
     let id = document.getElementById('id').value
-    let pw = document.getElementById('pw').value
+    let pw = hex_sha512(document.getElementById('pw').value)
     let res, formBody = []
 
     formBody.push(`id=${encodeURIComponent(id)}`)
@@ -176,6 +176,32 @@ async function createUser() {
     let pw = document.getElementById('createAccountModalPw').value
 
     if (!id || !pw) return
+    else if (pw.length < 8) {
+        alert('비밀번호는 최소 8자 이상이어야 합니다')
+        return
+    }
+
+    let flag1 = false, flag2 = false
+    // 알파벳 포함 검사
+    for (let i = 0; i < 26; i++) {
+        if (pw.indexOf(String.fromCharCode('a'.charCodeAt(0) + i)) !== -1) {
+            flag1 = true
+            break
+        }
+    }
+    // 숫자 포함 검사
+    for (let i = 0; i < 10; i++) {
+        if (pw.indexOf(i.toString()) !== -1) {
+            flag2 = true
+            break
+        }
+    }
+    if (!flag1 || !flag2) {
+        alert('비밀번호는 알파벳과 숫자를 포함해야 합니다')
+        return
+    }
+
+    pw = hex_sha512(pw)
 
     let res, formBody = []
 
