@@ -1,4 +1,4 @@
-const API = "http://220.90.237.33:5005"
+const API = "http://39.117.105.171:5005"
 let ADMINTOKEN
 
 async function adminLogin() {

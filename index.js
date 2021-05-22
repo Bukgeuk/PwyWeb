@@ -1,4 +1,4 @@
-const API = "http://220.90.237.33:5005"
+const API = "http://39.117.105.171:5005"
 const EVENTS = [
     '축구',
     '농구',
@@ -271,8 +271,10 @@ async function load() {
             subject.appendChild(span)
         }
     
-        subject.children[0].classList.add('option-selected')
-        selectedSubject = subject.children[0].textContent
+        if (subject.children.length > 0) {
+            subject.children[0].classList.add('option-selected')
+            selectedSubject = subject.children[0].textContent
+        }
 
         listing()
     }
@@ -353,8 +355,10 @@ function selectService(num, name) {
         subject.appendChild(span)
     }
 
-    subject.children[0].classList.add('option-selected')
-    selectedSubject = subject.children[0].textContent
+    if (subject.children.length > 0) {
+        subject.children[0].classList.add('option-selected')
+        selectedSubject = subject.children[0].textContent
+    }
 
     listing()
 }
@@ -388,6 +392,8 @@ function listing() {
     while (scroll.lastElementChild) {
         scroll.removeChild(scroll.lastElementChild)
     }
+
+    if (temp[selectedSubject] === undefined) return
 
     for (let item of temp[selectedSubject]) {
         let div = document.createElement('div')
