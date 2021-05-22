@@ -42,10 +42,10 @@ section {
 #center {
     width: 70%;
 
-    padding: 50px 20px;
+    padding: 10vh 20px 0 20px;
 }
 
-#filter > span, #sort > span {
+#filter > span, #sort > span, #subject > span, #service > span {
     margin-left: 20px;
     display: inline-block;
     cursor: pointer;
@@ -67,7 +67,7 @@ section {
 
 #option > div > div:first-child {
     border-right: 1px solid black;
-    padding: 0 5px;
+    padding: 0 20px 0 0;
     width: max-content;
     white-space: nowrap;
     text-align: center;
@@ -88,6 +88,13 @@ section {
     color: white;
 }
 
+#scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    height: 60vh;
+}
+
 #scroll::-webkit-scrollbar {
     width: 5px;
 }
@@ -101,27 +108,70 @@ section {
     background-color: transparent;
 }
 
-#scroll > div:not(:last-child) {
-    margin-bottom: 20px;
+#scroll > div {
+    margin-top: 20px;
 }
 
-#scroll > div > div > span {
+#scroll > div > span, #item > span {
     display: inline-block;
     margin-left: 20px;
     text-align: center;
 }
 
-#scroll > div > div > span:first-child {
+#scroll > div > span:nth-child(1) {
     width: 70px;
 }
 
-.listing-number {
-    width: 8px;
+#scroll > div > span:nth-child(2) {
+    width: 115px;
+}
+
+#scroll > div > span:nth-child(3) {
+    width: 400px;
+}
+
+#scroll > div > span:nth-child(4), #scroll > div > span:nth-child(5), #scroll > div > span:nth-child(6) {
+    width: 16px;
+}
+
+#scroll > div > span:nth-child(7) {
+    width: 46px;
+}
+
+#scroll > div > span:nth-child(8) {
+    width: 100px;
 }
 
 #alarm {
     position: absolute;
     right: 0;
+    bottom: 0;
+
+    margin: 5px 5px;
+
+    display: none;
+}
+
+#item {
+    border-bottom: 1px solid black;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#item > span:last-child {
+    margin-right: 25px;
+}
+
+#table {
+    width: max-content;
+    margin: auto;
+}
+
+#reload {
+    position: absolute;
+    left: 0;
     bottom: 0;
 
     margin: 5px 5px;

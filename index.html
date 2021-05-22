@@ -40,12 +40,13 @@
                       <li><span class="dropdown-item" onclick="logout()">로그아웃</span></li>
                     </ul>
                 </div>
+                <button type="button" class="btn btn-outline-primary" id="reload" onclick="load()">새로고침</button>
             </div>
             <div id="center">
                 <div id="option">
                     <div>
                         <div>
-                            <span class="option-title">&nbsp;&nbsp;&nbsp;&nbsp;종목&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span class="option-title">스포츠 종목</span>
                         </div>
                         <div id="filter">
 
@@ -53,53 +54,44 @@
                     </div>
                     <div>
                         <div>
-                            <span class="option-title">정렬 기준&nbsp;</span>
+                            <span class="option-title">정렬 기준</span>
                         </div>
                         <div id="sort">
 
                         </div>
                     </div>
-                </div>
-                <div id="scroll">
                     <div>
                         <div>
-                            <span>Sbobet</span>
-                            <span>Date</span>
-                            <span>A - B</span>
-                            <span class="listing-number">2</span>
-                            <span class="listing-number">-</span>
-                            <span class="listing-number">3</span>
-                            <span class="listing-number">5</span>
+                            <span class="option-title">베팅 종목</span>
                         </div>
-                        <div>
-                            <span>Pinnacle</span>
-                            <span>Date</span>
-                            <span>A - B</span>
-                            <span class="listing-number">1</span>
-                            <span class="listing-number">1</span>
-                            <span class="listing-number">2</span>
-                            <span class="listing-number">7</span>
+                        <div id="subject">
+
                         </div>
                     </div>
                     <div>
                         <div>
-                            <span>Sbobet</span>
-                            <span>Date</span>
-                            <span>A - B</span>
-                            <span class="listing-number">2</span>
-                            <span class="listing-number">-</span>
-                            <span class="listing-number">3</span>
-                            <span class="listing-number">5</span>
+                            <span class="option-title">서비스명</span>
                         </div>
-                        <div>
-                            <span>Pinnacle</span>
-                            <span>Date</span>
-                            <span>A - B</span>
-                            <span class="listing-number">1</span>
-                            <span class="listing-number">1</span>
-                            <span class="listing-number">2</span>
-                            <span class="listing-number">7</span>
+                        <div id="service">
+                            <span onclick="selectService(0, 'Sbobet')" class="option-selected">Sbobet</span>
+                            <span onclick="selectService(1, 'Pinnacle')">Pinnacle</span>
+                            <span onclick="selectService(2, '모두')">모두</span>
                         </div>
+                    </div>
+                </div>
+                <div id="table">
+                    <div id="item">
+                        <span style="width: 70px;">서비스명</span>
+                        <span style="width: 115px;">날짜</span>
+                        <span style="width: 400px;">경기</span>
+                        <span style="width: 16px;">1</span>
+                        <span style="width: 16px;">X</span>
+                        <span style="width: 16px;">2</span>
+                        <span style="width: 46px;">수익률</span>
+                        <span style="width: 100px;">베팅 종목</span>
+                    </div>
+                    <div id="scroll">
+                       
                     </div>
                 </div>
             </div>

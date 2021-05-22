@@ -124,7 +124,5 @@ async function loadAlarm() {
         let noti = new Notification('새로운 수익률 -2% 이상 경기', { 
             body: `Sbobet ${sbo}건, Pinnacle ${pin}건`
         })
-
-        setTimeout(noti.close.bind(noti), 4000);
     }
 }
