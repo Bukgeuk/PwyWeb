@@ -1,4 +1,4 @@
-const API = "http://39.117.105.171:5005"
+const API = "http://www.pwyweb.p-e.kr:5005"
 const EVENTS = [
     '축구',
     '농구',
