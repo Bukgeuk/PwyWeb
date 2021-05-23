@@ -45,6 +45,13 @@ section {
     padding: 10vh 20px 0 20px;
 }
 
+#filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 #filter > span, #sort > span, #subject > span, #service > span {
     margin-left: 20px;
     display: inline-block;
@@ -110,6 +117,10 @@ section {
 
 #scroll > div {
     margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 #scroll > div > span, #item > span {
@@ -127,15 +138,15 @@ section {
 }
 
 #scroll > div > span:nth-child(3) {
-    width: 400px;
+    width: 600px;
 }
 
-#scroll > div > span:nth-child(4), #scroll > div > span:nth-child(5), #scroll > div > span:nth-child(6) {
-    width: 16px;
+#scroll > div > span:nth-child(3) > div:last-child {
+    font-style: italic;
 }
 
-#scroll > div > span:nth-child(7) {
-    width: 46px;
+#scroll > div > span:nth-child(4), #scroll > div > span:nth-child(5), #scroll > div > span:nth-child(6), #scroll > div > span:nth-child(7) {
+    width: 60px;
 }
 
 #scroll > div > span:nth-child(8) {

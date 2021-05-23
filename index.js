@@ -28,6 +28,7 @@ let TOKEN, selectedEvent = '축구', selectedSort = '날짜순', selectedService
 let savedId = '', savedPw = ''
 let RENEW_TIMER, ALARM_TIMER
 let DATA_PIN, DATA_SBO, DATA_ALL
+let loading = false
 
 window.addEventListener('DOMContentLoaded', () => {
     let filter = document.getElementById('filter')
@@ -118,7 +119,7 @@ async function login() {
         RENEW_TIMER = setInterval(renew, 1000 * 60 * 60)
         
         if (getUseAlarm() && isAllowedNotificationPermission()) {
-            ALARM_TIMER = setInterval(loadAlarm, 1000 * 60 * 30)
+            ALARM_TIMER = setInterval(loadAlarm, 1000 * 60 * 10)
         }
     }
 }
@@ -139,6 +140,8 @@ function checkLoginInput() {
 }
 
 function selectFilter(num, event) {
+    if (loading) return
+
     let filter = document.getElementById('filter')
 
     for (let item of filter.children) {
@@ -154,6 +157,8 @@ function selectFilter(num, event) {
 }
 
 function selectSort(num, event) {
+    if (loading) return
+
     let sort = document.getElementById('sort')
 
     for (let item of sort.children) {
@@ -184,6 +189,9 @@ function logout() {
 }
 
 async function load() {
+    if (loading) return
+    setLoading(true)
+
     try {
         res = await fetch(`${API}/api/v1/post/${selectedEvent}`, {
             method: 'get',
@@ -203,6 +211,8 @@ async function load() {
             alert('다시 로그인 해주세요')
         }
     } else {
+        setLoading(false)
+
         DATA_PIN = {}
         DATA_SBO = {}
         DATA_ALL = {}
@@ -317,6 +327,8 @@ async function renew() {
 }
 
 function selectService(num, name) {
+    if (loading) return
+
     let service = document.getElementById('service')
 
     for (let item of service.children) {
@@ -364,6 +376,8 @@ function selectService(num, name) {
 }
 
 function selectSubject(num, name) {
+    if (loading) return
+
     let subject = document.getElementById('subject')
 
     for (let item of subject.children) {
@@ -379,6 +393,8 @@ function selectSubject(num, name) {
 }
 
 function listing() {
+    if (loading) return
+
     let temp
     if (selectedService === 'Sbobet')
         temp = DATA_SBO
@@ -390,6 +406,7 @@ function listing() {
     let scroll = document.getElementById('scroll')
     
     while (scroll.lastElementChild) {
+        if (scroll.children.length === 1 && scroll.lastElementChild.id === 'loading') break
         scroll.removeChild(scroll.lastElementChild)
     }
 
@@ -403,19 +420,21 @@ function listing() {
         div.appendChild(span)
 
         span = document.createElement('span')
-        let date = new Date(item.doDate)
-        let hour = date.getHours().toString()
-        if (Number(hour) < 10 && hour.length === 1)
-            hour = '0' + hour
-        let minute = date.getMinutes().toString()
-        if (Number(minute) < 10 && minute.length === 1)
-            minute = '0' + minute
+        let sp = item.doDate.split(' ')
+        let date = sp[0].split('-')
+        if (date[1][0] === '0') date[1] = date[1].substr(1)
+        let time = sp[1].split(':')
 
-        span.textContent = `${date.getMonth() + 1}월 ${date.getDate()}일 ${hour}:${minute}`
+        span.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[2]}`
         div.appendChild(span)
 
         span = document.createElement('span')
-        span.textContent = `${item.first} - ${item.second}`
+        let td1 = document.createElement('div')
+        let td2 = document.createElement('div')
+        td1.textContent = `${item.first} - ${item.second}`
+        td2.textContent = item.game
+        span.appendChild(td1)
+        span.appendChild(td2)
         div.appendChild(span)
 
         span = document.createElement('span')
@@ -439,5 +458,23 @@ function listing() {
         div.appendChild(span)
 
         scroll.appendChild(div)
+    }
+}
+
+function setLoading(value) {
+    loading = value
+    let element = document.getElementById('loading')
+    if (value === true) {
+        let scroll = document.getElementById('scroll')
+        while (scroll.lastElementChild) {
+            if (scroll.children.length === 1 && scroll.lastElementChild.id === 'loading') break
+            scroll.removeChild(scroll.lastElementChild)
+        }
+
+        element.classList.add('d-flex', 'justify-content-center')
+        element.style.display = 'unset'
+    } else if (value === false) {
+        element.classList.remove('d-flex', 'justify-content-center')
+        element.style.display = 'none'
     }
 }
