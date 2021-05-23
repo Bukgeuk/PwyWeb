@@ -425,7 +425,7 @@ function listing() {
         if (date[1][0] === '0') date[1] = date[1].substr(1)
         let time = sp[1].split(':')
 
-        span.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[2]}`
+        span.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
         div.appendChild(span)
 
         span = document.createElement('span')
