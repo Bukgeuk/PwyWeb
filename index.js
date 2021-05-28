@@ -26,9 +26,9 @@ const SORTS = [
 ]
 let TOKEN, selectedEvent = '축구', selectedSort = '날짜순', selectedService = 'Sbobet', selectedSubject = ''
 let savedId = '', savedPw = ''
-let RENEW_TIMER, ALARM_TIMER
+let RENEW_TIMER, ALARM_TIMER, RELOAD_TIMER
 let DATA_PIN, DATA_SBO, DATA_ALL
-let loading = false
+let loading = false, left_reload = 60
 
 window.addEventListener('DOMContentLoaded', () => {
     let filter = document.getElementById('filter')
@@ -117,6 +117,8 @@ async function login() {
         load()
 
         RENEW_TIMER = setInterval(renew, 1000 * 60 * 60)
+        updateReloadBtnContent()
+        RELOAD_TIMER = setInterval(autoReload, 1000)
         
         if (getUseAlarm() && isAllowedNotificationPermission()) {
             ALARM_TIMER = setInterval(loadAlarm, 1000 * 60 * 10)
@@ -182,6 +184,8 @@ function logout() {
 
     clearInterval(RENEW_TIMER)
     RENEW_TIMER = undefined
+    clearInterval(RELOAD_TIMER)
+    RELOAD_TIMER = undefined
     if (ALARM_TIMER !== undefined) {
         clearInterval(ALARM_TIMER)
         ALARM_TIMER = undefined
@@ -476,5 +480,118 @@ function setLoading(value) {
     } else if (value === false) {
         element.classList.remove('d-flex', 'justify-content-center')
         element.style.display = 'none'
+    }
+}
+
+function updateReloadBtnContent() {
+    document.getElementById('reload').textContent = `새로고침(${left_reload})`
+}
+
+async function autoReload() {
+    if (left_reload > 0) {
+        left_reload--
+        updateReloadBtnContent()
+    } else if (left_reload === 0) {
+        left_reload = 60
+        updateReloadBtnContent()
+
+        const currentEvent = selectedEvent
+
+        try {
+            res = await fetch(`${API}/api/v1/post/${selectedEvent}`, {
+                method: 'get',
+                headers: {
+                    'authentication': TOKEN,
+                    'isOrderByOdd': selectedSort === '날짜순' ? false : true
+                }
+            })
+            res = await res.json()
+        } catch (err) {
+            console.log(err)
+        }
+
+        if (res.errorCode) {
+            if (res.errorCode === 'E302') {
+                logout()
+                alert('다시 로그인 해주세요')
+            }
+        } else {
+            if (selectedEvent != currentEvent) return
+
+            DATA_PIN = {}
+            DATA_SBO = {}
+            DATA_ALL = {}
+
+            for (let item of res) {
+                if (item.pageUid === 'Sbobet') {
+                    if (DATA_SBO[item.subject] === undefined) {
+                        DATA_SBO[item.subject] = []
+                    }
+
+                    if (DATA_SBO['모두'] === undefined) {
+                        DATA_SBO['모두'] = []
+                    }
+
+                    DATA_SBO[item.subject].push(item)
+                    DATA_SBO['모두'].push(item)
+                } else if (item.pageUid === 'Pinnacle') {
+                    if (DATA_PIN[item.subject] === undefined) {
+                        DATA_PIN[item.subject] = []
+                    }
+
+                    if (DATA_PIN['모두'] === undefined) {
+                        DATA_PIN['모두'] = []
+                    }
+
+                    DATA_PIN[item.subject].push(item)
+                    DATA_PIN['모두'].push(item)
+                }
+
+                if (DATA_ALL[item.subject] === undefined) {
+                    DATA_ALL[item.subject] = []
+                }
+
+                if (DATA_ALL['모두'] === undefined) {
+                    DATA_ALL['모두'] = []
+                }
+
+                DATA_ALL[item.subject].push(item)
+                DATA_ALL['모두'].push(item)
+            }
+
+            let subject = document.getElementById('subject')
+            let temp
+            if (selectedService === 'Sbobet')
+                temp = DATA_SBO
+            else if (selectedService === 'Pinnacle')
+                temp = DATA_PIN
+            else if (selectedService === '모두')
+                temp = DATA_ALL
+
+            while (subject.lastElementChild) {
+                subject.removeChild(subject.lastElementChild)
+            }
+
+            let arr = []
+            for (let item in temp)
+                arr.push(item)
+            arr.sort(subjectSort)
+
+            for (let i = 0; i < arr.length; i++) {
+                let span = document.createElement('span')
+                span.textContent = arr[i]
+            
+                span.setAttribute('onclick', `selectSubject(${i}, '${arr[i]}')`)
+            
+                subject.appendChild(span)
+            }
+        
+            if (subject.children.length > 0) {
+                subject.children[0].classList.add('option-selected')
+                selectedSubject = subject.children[0].textContent
+            }
+
+            listing()
+        }
     }
 }
