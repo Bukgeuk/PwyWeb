@@ -21,10 +21,10 @@
                 </div>
                 <div>
                     <div class="input-group mb-3">
-                        <input type="text" id="id" class="form-control" placeholder="아이디" aria-label="id" onkeyup="checkLoginInput()">
+                        <input type="text" id="id" class="form-control" placeholder="아이디" aria-label="id" onkeyup="checkLoginInput(event)">
                     </div>
                     <div class="input-group">
-                        <input type="password" id="pw" class="form-control" placeholder="비밀번호" aria-label="pw" onkeyup="checkLoginInput()">
+                        <input type="password" id="pw" class="form-control" placeholder="비밀번호" aria-label="pw" onkeyup="checkLoginInput(event)">
                     </div>
                     <span id="errmsg"></span>
                     <button type="button" id="loginBtn" class="btn btn-outline-primary mt-3 longBtn disabled" onclick="login()">로그인</button>
@@ -46,7 +46,7 @@
                 <div id="option">
                     <div>
                         <div>
-                            <span class="option-title">스포츠 종목</span>
+                            <span class="option-title" style="line-height: 48px;">스포츠 종목</span>
                         </div>
                         <div id="filter">
 
@@ -62,7 +62,7 @@
                     </div>
                     <div>
                         <div>
-                            <span class="option-title">베팅 종목</span>
+                            <span class="option-title" style="line-height: 48px;">베팅 종목</span>
                         </div>
                         <div id="subject">
 
@@ -84,10 +84,9 @@
                         <span style="width: 70px;">서비스명</span>
                         <span style="width: 115px;">날짜</span>
                         <span style="width: 600px;">경기</span>
-                        <span style="width: 60px;">1</span>
-                        <span style="width: 60px;">X</span>
-                        <span style="width: 60px;">2</span>
-                        <span style="width: 60px;">수익률</span>
+                        <span style="width: 75px;">1</span>
+                        <span style="width: 75px;">2</span>
+                        <span style="width: 70px;">수익률</span>
                         <span style="width: 100px;">베팅 종목</span>
                     </div>
                     <div id="scroll">

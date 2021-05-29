@@ -20,10 +20,10 @@
                 </div>
                 <div>
                     <div class="input-group mb-3">
-                        <input type="text" id="id" class="form-control" placeholder="아이디" aria-label="id" onkeyup="checkLoginInput()">
+                        <input type="text" id="id" class="form-control" placeholder="아이디" aria-label="id" onkeyup="checkLoginInput(event)">
                     </div>
                     <div class="input-group">
-                        <input type="password" id="pw" class="form-control" placeholder="비밀번호" aria-label="pw" onkeyup="checkLoginInput()">
+                        <input type="password" id="pw" class="form-control" placeholder="비밀번호" aria-label="pw" onkeyup="checkLoginInput(event)">
                     </div>
                     <span id="errmsg"></span>
                     <button type="button" id="loginBtn" class="btn btn-outline-primary mt-3 longBtn disabled" onclick="adminLogin()">로그인</button>

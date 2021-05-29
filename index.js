@@ -28,7 +28,7 @@ let TOKEN, selectedEvent = '축구', selectedSort = '날짜순', selectedService
 let savedId = '', savedPw = ''
 let RENEW_TIMER, ALARM_TIMER, RELOAD_TIMER
 let DATA_PIN, DATA_SBO, DATA_ALL
-let loading = false, left_reload = 60
+let loading = false, left_reload = 60 * 5
 
 window.addEventListener('DOMContentLoaded', () => {
     let filter = document.getElementById('filter')
@@ -130,7 +130,7 @@ function toAdminPage() {
     window.location = 'admin.html'
 }
 
-function checkLoginInput() {
+function checkLoginInput(event) {
     let id = document.getElementById('id').value
     let pw = document.getElementById('pw').value
 
@@ -138,6 +138,10 @@ function checkLoginInput() {
         document.getElementById('loginBtn').classList.add('disabled')
     } else {
         document.getElementById('loginBtn').classList.remove('disabled')
+
+        if (event.code === "Enter") {
+            login()
+        }
     }
 }
 
@@ -414,7 +418,18 @@ function listing() {
         scroll.removeChild(scroll.lastElementChild)
     }
 
-    if (temp[selectedSubject] === undefined) return
+    if (temp[selectedSubject] === undefined) {
+        let div = document.createElement('div')
+        let span = document.createElement('span')
+        span.textContent = "데이터가 없음"
+        span.style.width = "100%"
+        span.style.fontSize = "1.3rem"
+        span.style.padding = "50px"
+        div.appendChild(span)
+        scroll.appendChild(div)
+
+        return
+    }
 
     for (let item of temp[selectedSubject]) {
         let div = document.createElement('div')
@@ -424,17 +439,30 @@ function listing() {
         div.appendChild(span)
 
         span = document.createElement('span')
+        let td1 = document.createElement('div')
+        let td2 = document.createElement('div')
+
         let sp = item.doDate.split(' ')
         let date = sp[0].split('-')
         if (date[1][0] === '0') date[1] = date[1].substr(1)
         let time = sp[1].split(':')
+        td1.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
+        td1.title = '경기 날짜'
 
-        span.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
+        sp = item.crawlDate.split(' ')
+        date = sp[0].split('-')
+        if (date[1][0] === '0') date[1] = date[1].substr(1)
+        time = sp[1].split(':')
+        td2.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
+        td2.title = '크롤링 날짜'
+
+        span.appendChild(td1)
+        span.appendChild(td2)
         div.appendChild(span)
 
         span = document.createElement('span')
-        let td1 = document.createElement('div')
-        let td2 = document.createElement('div')
+        td1 = document.createElement('div')
+        td2 = document.createElement('div')
         td1.textContent = `${item.first} - ${item.second}`
         td2.textContent = item.game
         span.appendChild(td1)
@@ -442,15 +470,29 @@ function listing() {
         div.appendChild(span)
 
         span = document.createElement('span')
-        span.textContent = item.odd1
+        if (item.firstname) {
+            td1 = document.createElement('div')
+            td2 = document.createElement('div')
+            td1.textContent = item.firstname
+            td2.textContent = item.odd1
+            span.appendChild(td1)
+            span.appendChild(td2)
+        } else {
+            span.textContent = item.odd1
+        }
         div.appendChild(span)
 
         span = document.createElement('span')
-        span.textContent = item.odd3 === -1 ? '-' : item.odd3
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        span.textContent = item.odd2
+        td1 = document.createElement('div')
+        td2 = document.createElement('div')
+        if (item.secondname) {
+            td1.textContent = item.secondname
+            td2.textContent = item.odd2
+            span.appendChild(td1)
+            span.appendChild(td2)
+        } else {
+            span.textContent = item.odd2
+        }
         div.appendChild(span)
 
         span = document.createElement('span')
@@ -458,7 +500,13 @@ function listing() {
         div.appendChild(span)
 
         span = document.createElement('span')
-        span.textContent = item.subject
+        sp = item.subject.split(' – ')
+        td1 = document.createElement('div')
+        td2 = document.createElement('div')
+        td1.textContent = sp[0]
+        td2.textContent = `(${sp[1]})`
+        span.appendChild(td1)
+        span.appendChild(td2)
         div.appendChild(span)
 
         scroll.appendChild(div)
@@ -492,10 +540,11 @@ async function autoReload() {
         left_reload--
         updateReloadBtnContent()
     } else if (left_reload === 0) {
-        left_reload = 60
+        left_reload = 60 * 5
         updateReloadBtnContent()
 
         const currentEvent = selectedEvent
+        const currentSubject = selectedSubject
 
         try {
             res = await fetch(`${API}/api/v1/post/${selectedEvent}`, {
@@ -586,7 +635,17 @@ async function autoReload() {
                 subject.appendChild(span)
             }
         
-            if (subject.children.length > 0) {
+            let flag = false
+            for (let i = 0; i < subject.children.length; i++) {
+                if (subject.children[i].textContent === currentSubject) {
+                    subject.children[i].classList.add('option-selected')
+                    selectedSubject = currentSubject
+                    flag = true
+                    break
+                }
+            }
+
+            if (subject.children.length > 0 && !flag) {
                 subject.children[0].classList.add('option-selected')
                 selectedSubject = subject.children[0].textContent
             }

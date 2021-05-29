@@ -244,7 +244,7 @@ function resetCreateAccountInput() {
     document.getElementById('createAccountModalBtn').classList.remove('disabled')
 }
 
-function checkLoginInput() {
+function checkLoginInput(event) {
     let id = document.getElementById('id').value
     let pw = document.getElementById('pw').value
 
@@ -252,6 +252,10 @@ function checkLoginInput() {
         document.getElementById('loginBtn').classList.add('disabled')
     } else {
         document.getElementById('loginBtn').classList.remove('disabled')
+
+        if (event.code === "Enter") {
+            adminLogin()
+        }
     }
 }
 
