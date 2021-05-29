@@ -131,6 +131,7 @@ section {
 
 #scroll > div > span:nth-child(2) {
     width: 115px;
+    cursor: default;
 }
 
 #scroll > div > span:nth-child(3) {
