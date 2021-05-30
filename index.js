@@ -1,4 +1,4 @@
-const API = "https:teamks.pw:5005"
+const API = "https://teamks.pw:5005"
 const EVENTS = [
     '축구',
     '농구',
