@@ -501,12 +501,16 @@ function listing() {
 
         span = document.createElement('span')
         sp = item.subject.split(' – ')
-        td1 = document.createElement('div')
-        td2 = document.createElement('div')
-        td1.textContent = sp[0]
-        td2.textContent = `(${sp[1]})`
-        span.appendChild(td1)
-        span.appendChild(td2)
+        if (sp.length === 1) {
+            span.textContent = item.subject
+        } else {
+            td1 = document.createElement('div')
+            td2 = document.createElement('div')
+            td1.textContent = sp[0]
+            td2.textContent = `(${sp[1]})`
+            span.appendChild(td1)
+            span.appendChild(td2)
+        }    
         div.appendChild(span)
 
         scroll.appendChild(div)
