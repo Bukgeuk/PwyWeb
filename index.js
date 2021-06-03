@@ -470,7 +470,7 @@ function listing() {
         div.appendChild(span)
 
         span = document.createElement('span')
-        if (item.firstname) {
+        if (item.firstname && item.firstname !== "undefined") {
             td1 = document.createElement('div')
             td2 = document.createElement('div')
             td1.textContent = item.firstname
@@ -485,7 +485,7 @@ function listing() {
         span = document.createElement('span')
         td1 = document.createElement('div')
         td2 = document.createElement('div')
-        if (item.secondname) {
+        if (item.secondname && item.secondname !== "undefined") {
             td1.textContent = item.secondname
             td2.textContent = item.odd2
             span.appendChild(td1)
