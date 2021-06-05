@@ -449,12 +449,26 @@ function listing() {
         td1.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
         td1.title = '경기 날짜'
 
-        sp = item.crawlDate.split(' ')
-        date = sp[0].split('-')
-        if (date[1][0] === '0') date[1] = date[1].substr(1)
-        time = sp[1].split(':')
-        td2.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
-        td2.title = '크롤링 날짜'
+        {
+            let msec = (new Date()).getTime() - (new Date(item.crawlDate)).getTime()
+            let sec = parseInt(msec / 1000)
+            let min = parseInt(sec / 60)
+            let hour = parseInt(min / 60)
+
+            sec %= min
+            min %= hour
+
+            let str = ""
+            if (hour !== 0)
+                str += `${hour}시간 `
+            if (min !== 0)
+                str += `${min}분 `
+            if (str === "")
+                str += `${sec}초 `
+
+            td2.textContent = `${str} 전`
+        }
+        td2.title = '크롤링 시간'
 
         span.appendChild(td1)
         span.appendChild(td2)
