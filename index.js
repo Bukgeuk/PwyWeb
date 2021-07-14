@@ -455,8 +455,8 @@ function listing() {
             let min = parseInt(sec / 60)
             let hour = parseInt(min / 60)
 
-            sec %= min
-            min %= hour
+            sec %= 60
+            min %= 60
 
             let str = ""
             if (hour !== 0)
