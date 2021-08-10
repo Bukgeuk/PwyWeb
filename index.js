@@ -24,6 +24,7 @@ const SORTS = [
     '날짜순',
     '수익률순'
 ]
+const DATA_AMOUNT = 100
 let TOKEN, selectedEvent = '축구', selectedSort = '날짜순', selectedService = 'Sbobet', selectedSubject = ''
 let savedId = '', savedPw = ''
 let RENEW_TIMER, ALARM_TIMER, RELOAD_TIMER
@@ -383,6 +384,13 @@ function selectService(num, name) {
     listing()
 }
 
+function onScroll() {
+    let scroll = document.getElementById('scroll')
+
+    if (scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight)
+        putData()
+}
+
 function selectSubject(num, name) {
     if (loading) return
 
@@ -398,6 +406,124 @@ function selectSubject(num, name) {
     selectedSubject = name
 
     listing()
+}
+
+function putData() {
+    let scroll = document.getElementById('scroll')
+
+    let temp
+    if (selectedService === 'Sbobet')
+        temp = DATA_SBO
+    else if (selectedService === 'Pinnacle')
+        temp = DATA_PIN
+    else if (selectedService === '모두')
+        temp = DATA_ALL
+
+    if (scroll.children.length < temp[selectedSubject].length) {
+        const offset = scroll.children.length
+        for (let i = 0; i < DATA_AMOUNT; i++) {
+            const item = temp[selectedSubject][i + offset]
+
+            if (item === undefined) break
+
+            let div = document.createElement('div')
+
+            let span = document.createElement('span')
+            span.textContent = item.pageUid
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            let td1 = document.createElement('div')
+            let td2 = document.createElement('div')
+    
+            let sp = item.doDate.split(' ')
+            let date = sp[0].split('-')
+            if (date[1][0] === '0') date[1] = date[1].substr(1)
+            let time = sp[1].split(':')
+            td1.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
+            td1.title = '경기 날짜'
+    
+            {
+                let msec = (new Date()).getTime() - (new Date(item.crawlDate)).getTime()
+                let sec = parseInt(msec / 1000)
+                let min = parseInt(sec / 60)
+                let hour = parseInt(min / 60)
+    
+                sec %= 60
+                min %= 60
+    
+                let str = ""
+                if (hour !== 0)
+                    str += `${hour}시간 `
+                if (min !== 0)
+                    str += `${min}분 `
+                if (str === "")
+                    str += `${sec}초 `
+    
+                td2.textContent = `${str} 전`
+            }
+            td2.title = '크롤링 시간'
+    
+            span.appendChild(td1)
+            span.appendChild(td2)
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            td1 = document.createElement('div')
+            td2 = document.createElement('div')
+            td1.textContent = `${item.first} - ${item.second}`
+            td2.textContent = item.game
+            span.appendChild(td1)
+            span.appendChild(td2)
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            if (item.firstname && item.firstname !== "undefined") {
+                td1 = document.createElement('div')
+                td2 = document.createElement('div')
+                td1.textContent = item.firstname
+                td2.textContent = item.odd1
+                span.appendChild(td1)
+                span.appendChild(td2)
+            } else {
+                span.textContent = item.odd1
+            }
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            td1 = document.createElement('div')
+            td2 = document.createElement('div')
+            if (item.secondname && item.secondname !== "undefined") {
+                td1.textContent = item.secondname
+                td2.textContent = item.odd2
+                span.appendChild(td1)
+                span.appendChild(td2)
+            } else {
+                span.textContent = item.odd2
+            }
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            span.textContent = item.margin
+            div.appendChild(span)
+    
+            span = document.createElement('span')
+            sp = item.subject.split(' – ')
+            if (sp.length === 1) {
+                span.textContent = item.subject
+            } else {
+                td1 = document.createElement('div')
+                td2 = document.createElement('div')
+                td1.textContent = sp[0]
+                td2.textContent = `(${sp[1]})`
+                span.appendChild(td1)
+                span.appendChild(td2)
+            }    
+            div.appendChild(span)
+    
+            scroll.appendChild(div)
+        }
+    }
 }
 
 function listing() {
@@ -431,104 +557,7 @@ function listing() {
         return
     }
 
-    for (let item of temp[selectedSubject]) {
-        let div = document.createElement('div')
-
-        let span = document.createElement('span')
-        span.textContent = item.pageUid
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        let td1 = document.createElement('div')
-        let td2 = document.createElement('div')
-
-        let sp = item.doDate.split(' ')
-        let date = sp[0].split('-')
-        if (date[1][0] === '0') date[1] = date[1].substr(1)
-        let time = sp[1].split(':')
-        td1.textContent = `${date[1]}월 ${date[2]}일 ${time[0]}:${time[1]}`
-        td1.title = '경기 날짜'
-
-        {
-            let msec = (new Date()).getTime() - (new Date(item.crawlDate)).getTime()
-            let sec = parseInt(msec / 1000)
-            let min = parseInt(sec / 60)
-            let hour = parseInt(min / 60)
-
-            sec %= 60
-            min %= 60
-
-            let str = ""
-            if (hour !== 0)
-                str += `${hour}시간 `
-            if (min !== 0)
-                str += `${min}분 `
-            if (str === "")
-                str += `${sec}초 `
-
-            td2.textContent = `${str} 전`
-        }
-        td2.title = '크롤링 시간'
-
-        span.appendChild(td1)
-        span.appendChild(td2)
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        td1 = document.createElement('div')
-        td2 = document.createElement('div')
-        td1.textContent = `${item.first} - ${item.second}`
-        td2.textContent = item.game
-        span.appendChild(td1)
-        span.appendChild(td2)
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        if (item.firstname && item.firstname !== "undefined") {
-            td1 = document.createElement('div')
-            td2 = document.createElement('div')
-            td1.textContent = item.firstname
-            td2.textContent = item.odd1
-            span.appendChild(td1)
-            span.appendChild(td2)
-        } else {
-            span.textContent = item.odd1
-        }
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        td1 = document.createElement('div')
-        td2 = document.createElement('div')
-        if (item.secondname && item.secondname !== "undefined") {
-            td1.textContent = item.secondname
-            td2.textContent = item.odd2
-            span.appendChild(td1)
-            span.appendChild(td2)
-        } else {
-            span.textContent = item.odd2
-        }
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        span.textContent = item.margin
-        div.appendChild(span)
-
-        span = document.createElement('span')
-        sp = item.subject.split(' – ')
-        if (sp.length === 1) {
-            span.textContent = item.subject
-        } else {
-            td1 = document.createElement('div')
-            td2 = document.createElement('div')
-            td1.textContent = sp[0]
-            td2.textContent = `(${sp[1]})`
-            span.appendChild(td1)
-            span.appendChild(td2)
-        }    
-        div.appendChild(span)
-
-        scroll.appendChild(div)
-    }
+    putData()
 }
 
 function setLoading(value) {
